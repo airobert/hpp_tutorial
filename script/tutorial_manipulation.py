@@ -1,3 +1,9 @@
+# you need to run the servers in a terminal respectively:
+#hpp-manipulation-server
+#hpp-wholebody-step-server
+
+
+
 # Import libraries and load robots. {{{1
 
 # Import. {{{2

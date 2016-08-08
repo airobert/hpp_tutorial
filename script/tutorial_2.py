@@ -36,9 +36,12 @@ ps.addPathOptimizer ("RandomShortcut")
 
 print ps.solve ()
 
-# from hpp.gepetto import PathPlayer
-# r = vf.createViewer()
-# pp = PathPlayer (robot.client, r)
 
-# pp (0)
+
+from hpp.gepetto import PathPlayer
+r = vf.createViewer()
+pp = PathPlayer (robot.client, r)
+# r(q_init)
+# r(q_goal)
+pp (0)
 # pp (1)
