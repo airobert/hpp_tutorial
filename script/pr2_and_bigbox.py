@@ -24,7 +24,11 @@ class Environment (object):
   srdfSuffix = ""
 
 robot = Robot ('pr2-box', 'pr2')
+print robot.getCurrentConfig ()
+
+
 ps = ProblemSolver (robot)
+# ps.client.basic.robot.setRobotJointPosition([0, 0, 0, 0.3, 1, 0, 0, 0])
 ## ViewerFactory is a class that generates Viewer on the go. It means you can
 ## restart the server and regenerate a new windows.
 ## To generate a window:
@@ -50,7 +54,7 @@ r = fk.createViewer ()
 r(q0)
 graph = ConstraintGraph (robot, 'graph')
 graph.createNode (['free'])
-graph.createEdge ('free', 'free', 'move_free', 1)
+graph.createEdge ('free', 'free', 'move_free', 1, 'free')
 
 #ps.client.basic.problem.selectPathValidation ("Progressive", 0.02)
 res= ps.directPath (q0,q1,True)
