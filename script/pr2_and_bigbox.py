@@ -12,7 +12,7 @@ class Box (object):
   rootJointType = 'planar'
   packageName = 'hpp_tutorial'
   meshPackageName = 'hpp_tutorial'
-  urdfName = 'box'
+  urdfName = 'bigbox'
   urdfSuffix = ""
   srdfSuffix = ""
 
@@ -31,10 +31,10 @@ ps = ProblemSolver (robot)
 ## fk.createRealClient ()
 fk = ViewerFactory (ps)
 
-fk.loadObjectModel (Box, 'box')
+fk.loadObjectModel (Box, 'bigbox')
 
 robot.setJointBounds ("pr2/base_joint_xy", [-2,2,-2,2])
-robot.setJointBounds ("box/base_joint_xy", [-2,2,-2,2])
+robot.setJointBounds ("bigbox/base_joint_xy", [-2,2,-2,2])
 
 q0 = robot.getCurrentConfig ()
 q1 = q0[::]
@@ -48,7 +48,6 @@ q1 [-4] = 1
 q1 [-3] = -1
 r = fk.createViewer ()
 r(q0)
-
 graph = ConstraintGraph (robot, 'graph')
 graph.createNode (['free'])
 graph.createEdge ('free', 'free', 'move_free', 1)

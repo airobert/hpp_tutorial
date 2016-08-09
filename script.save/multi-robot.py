@@ -47,8 +47,6 @@ q1 [1] = 1
 q1 [-4] = 1
 q1 [-3] = -1
 r = fk.createViewer ()
-r(q0)
-
 graph = ConstraintGraph (robot, 'graph')
 graph.createNode (['free'])
 graph.createEdge ('free', 'free', 'move_free', 1)
@@ -63,6 +61,4 @@ pp = PathPlayer (ps.client.basic, r)
 
 # robot.rootJointType
 # returns: {'box': 'freeflyer', 'pr2': 'planar'}
-
-pp(0)
 
