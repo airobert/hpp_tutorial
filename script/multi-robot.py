@@ -4,6 +4,7 @@ from hpp.corbaserver.manipulation.pr2 import Robot
 from hpp.corbaserver.manipulation import ProblemSolver, ConstraintGraph
 from hpp.gepetto.manipulation import ViewerFactory
 from hpp.gepetto import PathPlayer
+from hpp.corbaserver.pr2 import Robot as PR2Robot
 
 # 2}}}
 
@@ -23,38 +24,50 @@ class Environment (object):
   urdfSuffix = ""
   srdfSuffix = ""
 
-robot = Robot ('pr2-box', 'pr2')
-ps = ProblemSolver (robot)
+multi_robot = Robot ('multi_robot', 'r1') # the first name is the multi robot's name, the second is the robot's name
+ps = ProblemSolver (multi_robot)
 ## ViewerFactory is a class that generates Viewer on the go. It means you can
 ## restart the server and regenerate a new windows.
 ## To generate a window:
 ## fk.createRealClient ()
 fk = ViewerFactory (ps)
 
-fk.loadObjectModel (Box, 'box')
+fk.loadObjectModel(PR2Robot, 'r2')
+# fk.loadObjectModel(Robot, 'pr2_')
+# fk.loadObjectModel(Robot, 'pr3')
 
-robot.setJointBounds ("pr2/base_joint_xy", [-2,2,-2,2])
-robot.setJointBounds ("box/base_joint_xy", [-2,2,-2,2])
+# fk.loadObjectModel (Box, 'box')
 
-q0 = robot.getCurrentConfig ()
+multi_robot.setJointBounds ("r1/base_joint_xy", [-2,2,-2,2])
+# robot.setJointBounds ("box/base_joint_xy", [-2,2,-2,2])
+multi_robot.setJointBounds ("r2/base_joint_xy", [-2,2,-2,2])
+
+q0 = multi_robot.getCurrentConfig ()
 q1 = q0[::]
 q0 [0] = -1
 q0 [1] = -1
-q0 [-4] = -1
-q0 [-3] = 1
+q0 [40] = -1
+q0 [41] = 1
+
 q1 [0] = 1
 q1 [1] = 1
-q1 [-4] = 1
-q1 [-3] = -1
+q1 [40] = 1
+q1 [41] = -1
 r = fk.createViewer ()
 r(q0)
 
-graph = ConstraintGraph (robot, 'graph')
+graph = ConstraintGraph (multi_robot, 'graph')
 graph.createNode (['free'])
-graph.createEdge ('free', 'free', 'move_free', 1)
+graph.createEdge ('free', 'free', 'move_free', 1, 'free')
 
 #ps.client.basic.problem.selectPathValidation ("Progressive", 0.02)
-res= ps.directPath (q0,q1,True)
+# res= ps.directPath (q0,q1,True)
+
+ps.selectPathPlanner ("VisibilityPrmPlanner")
+ps.addPathOptimizer ("RandomShortcut")
+ps.setInitialConfig(q0)
+ps.addGoalConfig (q1)
+print ps.solve()
 
 pp = PathPlayer (ps.client.basic, r)
 
